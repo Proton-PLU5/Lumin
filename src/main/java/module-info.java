@@ -1,4 +1,4 @@
-module me.protonplus.lumin {
+open module me.protonplus.lumin {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;
@@ -7,7 +7,11 @@ module me.protonplus.lumin {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires org.jetbrains.annotations;
+    requires java.desktop;
+    requires com.google.gson;
+    requires org.apache.logging.log4j;
+    requires porcupine.java;
+    requires cheetah.java;
 
-    opens me.protonplus.lumin to javafx.fxml;
     exports me.protonplus.lumin;
 }

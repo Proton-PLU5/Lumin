@@ -1,0 +1,40 @@
+Language model created by QuickLM on Wed Sep 13 03:06:56 EDT 2023
+Copyright (c) 1996-2010 Carnegie Mellon University and Alexander I. Rudnicky
+
+The model is in standard ARPA format, designed by Doug Paul while he was at MITRE.
+
+The code that was used to produce this language model is available in Open Source.
+Please visit http://www.speech.cs.cmu.edu/tools/ for more information
+
+The (fixed) discount mass is 0.5. The backoffs are computed using the ratio method.
+This model based on a corpus of 2 sentences and 6 words
+
+\data\
+ngram 1=6
+ngram 2=6
+ngram 3=5
+
+\1-grams:
+-1.0000 </s> -0.3010
+-1.0000 <s> -0.2553
+-1.3010 BYE -0.2553
+-1.3010 HI -0.2553
+-1.0000 LUMIN -0.2553
+-1.0000 SAY -0.2553
+
+\2-grams:
+-0.3010 <s> LUMIN 0.0000
+-0.3010 BYE </s> -0.3010
+-0.3010 HI </s> -0.3010
+-0.3010 LUMIN SAY 0.0000
+-0.6021 SAY BYE 0.0000
+-0.6021 SAY HI 0.0000
+
+\3-grams:
+-0.3010 <s> LUMIN SAY
+-0.6021 LUMIN SAY BYE
+-0.6021 LUMIN SAY HI
+-0.3010 SAY BYE </s>
+-0.3010 SAY HI </s>
+
+\end\

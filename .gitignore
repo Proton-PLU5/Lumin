@@ -1,5 +1,5 @@
 javafx-sdk-20.0.1/
-
+.idea/
 .gradle
 **/build/
 !src/**/build/
