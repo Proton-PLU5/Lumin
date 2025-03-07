@@ -10,8 +10,11 @@ open module me.protonplus.lumin {
     requires java.desktop;
     requires com.google.gson;
     requires org.apache.logging.log4j;
+    requires org.apache.logging.log4j.core;
     requires porcupine.java;
     requires cheetah.java;
+
+    uses org.apache.logging.log4j.spi.Provider;
 
     exports me.protonplus.lumin;
 }

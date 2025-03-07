@@ -1,6 +1,7 @@
 package me.protonplus.lumin.util;
 
 import javafx.stage.Stage;
+import me.protonplus.lumin.Lumin;
 
 import java.util.*;
 
@@ -21,5 +22,17 @@ public class StageManager {
         return stages.stream().filter((stringStageEntry) -> {
             return Objects.equals(stringStageEntry.getKey(), name);
         }).findFirst().map(Map.Entry::getValue);
+    }
+
+    public static void removeStage(Stage stage) {
+        Iterator<Map.Entry<String, Stage>> iterator = stages.iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Stage> entry = iterator.next();
+            if (Objects.equals(entry.getValue(), stage)) {
+                iterator.remove();
+                Lumin.LOGGER.info("Removed Stage: " + entry.getValue().getScene().getClass().getName());
+                return;
+            }
+        }
     }
 }

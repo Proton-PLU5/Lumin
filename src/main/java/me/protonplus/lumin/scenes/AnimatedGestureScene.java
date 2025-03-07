@@ -29,7 +29,7 @@ public class AnimatedGestureScene extends Scene {
         stackPane.setStyle("-fx-background-color: #d1cfe2; -fx-background-radius: 15");
 
         // Animated Image
-        ImageView animatedImage = new ImageView(animationLocation);
+        ImageView animatedImage = new ImageView(this.getClass().getResource(animationLocation).toExternalForm());
         animatedImage.setFitWidth(50);
         animatedImage.setFitHeight(50);
 

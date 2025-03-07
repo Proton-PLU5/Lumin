@@ -2,6 +2,7 @@ javafx-sdk-20.0.1/
 .idea/
 .gradle
 **/build/
+build/
 !src/**/build/
 
 # Ignore Gradle GUI config

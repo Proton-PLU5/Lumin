@@ -1,4 +1,4 @@
-package me.protonplus.lumin.scenes.textbox;
+package me.protonplus.lumin.scenes;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -20,7 +20,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ScalableTextBoxV2Scene extends Scene {
-    private int timeUntilExpiry = -1;
     private Timer timer;
     public ScalableTextBoxV2Scene(Group root, String text) {
         super(root);
@@ -64,7 +63,6 @@ public class ScalableTextBoxV2Scene extends Scene {
 
     public ScalableTextBoxV2Scene(String text, Integer timeUntilExpiry) {
         this(new Group(), text);
-        this.timeUntilExpiry = timeUntilExpiry;
         timer = new Timer();
         timer.schedule(new ExpiryTask(), timeUntilExpiry * 1000);
     }
