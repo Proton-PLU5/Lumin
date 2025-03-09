@@ -13,6 +13,8 @@ import me.protonplus.lumin.events.Events;
 import me.protonplus.lumin.scenes.AnimatedGestureScene;
 import me.protonplus.lumin.scenes.MainScene;
 import me.protonplus.lumin.scenes.ScalableTextBoxV2Scene;
+import me.protonplus.lumin.scenes.WeatherScene;
+import me.protonplus.lumin.util.LuminOperations;
 import me.protonplus.lumin.util.StageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,6 +64,10 @@ public class Lumin extends Application {
 
         Platform.runLater(() -> {
             showStartMessage(mainStage, 5);
+            WeatherScene weatherScene = new WeatherScene(new Group());
+            Stage weatherStage = new Stage(StageStyle.TRANSPARENT);
+            weatherStage.setScene(weatherScene);
+            weatherStage.show();
         });
     }
 

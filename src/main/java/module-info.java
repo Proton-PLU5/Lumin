@@ -13,6 +13,9 @@ open module me.protonplus.lumin {
     requires org.apache.logging.log4j.core;
     requires porcupine.java;
     requires cheetah.java;
+    requires com.maxmind.geoip2;
+    requires org.apache.httpcomponents.core5.httpcore5;
+    requires org.apache.httpcomponents.client5.httpclient5;
 
     uses org.apache.logging.log4j.spi.Provider;
 
