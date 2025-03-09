@@ -3,9 +3,6 @@ package me.protonplus.lumin;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -13,35 +10,31 @@ import me.protonplus.lumin.events.Events;
 import me.protonplus.lumin.scenes.AnimatedGestureScene;
 import me.protonplus.lumin.scenes.MainScene;
 import me.protonplus.lumin.scenes.ScalableTextBoxV2Scene;
-import me.protonplus.lumin.scenes.WeatherScene;
-import me.protonplus.lumin.util.LuminOperations;
 import me.protonplus.lumin.util.StageManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Lumin extends Application {
 
-    public static final Logger LOGGER = LogManager.getLogger("Lumin");
+    public static final Logger LOGGER = LogManager.getLogger(Lumin.class);
     private MainScene scene;
     private Group root;
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     private double lerp(double start, double end, double t) {
         return start + t * (end - start);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
+        Lumin.LOGGER.info("Starting Lumin!");
+
         primaryStage.setTitle("Lumin");
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setOpacity(0);
@@ -61,14 +54,6 @@ public class Lumin extends Application {
         mainStage.setScene(scene);
         mainStage.setAlwaysOnTop(true);
         mainStage.show();
-
-        Platform.runLater(() -> {
-            showStartMessage(mainStage, 5);
-            WeatherScene weatherScene = new WeatherScene(new Group());
-            Stage weatherStage = new Stage(StageStyle.TRANSPARENT);
-            weatherStage.setScene(weatherScene);
-            weatherStage.show();
-        });
     }
 
     public static void launchApplication() {

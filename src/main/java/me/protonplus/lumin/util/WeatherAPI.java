@@ -11,10 +11,10 @@ import com.maxmind.geoip2.record.City;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.swing.text.html.parser.Entity;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,9 +23,10 @@ import java.net.InetAddress;
 import java.net.URL;
 
 public class WeatherAPI {
-    protected static final String API_TOKEN = "d3c60e1bc1dac8dcaf36b4ea469ef280";
-    protected static final String MAXMIND_LICENSE_KEY = "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";
-    protected static final int MAXMIND_ACCOUNT_ID = 928452;
+    protected static final String API_TOKEN = System.getenv("WEATHER_API_TOKEN");
+    protected static final String MAXMIND_LICENSE_KEY = System.getenv("MAXMIND_LICENSE_KEY");
+    protected static final int MAXMIND_ACCOUNT_ID = Integer.parseInt(System.getenv("MAXMIND_ACCOUNT_ID"));
+    protected static final Logger LOGGER = LogManager.getLogger();
 
     public static class WeatherData {
         private String weather;
@@ -174,10 +175,10 @@ public class WeatherAPI {
                 reader.close();
 
                 String weatherData = response.toString();
-                System.out.println(weatherData);
+                LOGGER.info(weatherData);
                 return weatherData;
             } else {
-                System.out.println("HTTP GET request failed with response code: " + responseCode);
+                LOGGER.info("HTTP GET request failed with response code: " + responseCode);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -192,7 +193,7 @@ public class WeatherAPI {
             CityResponse response = client.city(ipAddress);
 
             City city = response.getCity();
-            System.out.println(city.getName());
+            LOGGER.info(city.getName());
             return city.getName();
         } catch (IOException | GeoIp2Exception e) {
             e.printStackTrace();
@@ -225,7 +226,7 @@ public class WeatherAPI {
 
                 String publicIP = (String) JsonObject.get("origin").getAsString();
 
-                System.out.println("Public IP Address: " + publicIP);
+                LOGGER.info("Public IP Address: {}", publicIP);
                 return publicIP;
             } else {
                 // Handle other response codes (e.g., 403 Forbidden for invalid credentials)

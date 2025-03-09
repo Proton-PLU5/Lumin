@@ -43,6 +43,18 @@ extraJavaModuleInfo {
     module('cheetah-java-1.1.1.jar', 'cheetah.java', '1.1.1') {
         exports("ai.picovoice.cheetah")
     }
+    module('wit-java-1.0.0.jar', 'wit.java', '1.0.0') {
+        exports("com.clivern.wit")
+    }
+    module("tinylog-1.3.2.jar", "tinylog", "1.3.2") {
+        exports("org.tinylog")
+    }
+    module("okio-1.13.0.jar", "okio", "1.13.0") {
+        exports("okio")
+    }
+    module("okhttp-3.9.1.jar", "okhttp", "3.9.1") {
+        exports("okhttp")
+    }
 }
 
 dependencies {
@@ -51,16 +63,20 @@ dependencies {
     implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
     implementation 'org.jetbrains:annotations:20.1.0'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.12.1'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '3.0.0-beta2'
-    implementation 'org.apache.logging.log4j:log4j-core:3.0.0-beta2'
+
+    // Logging
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
 
     // Voice Recognition
     implementation group: 'ai.picovoice', name: 'porcupine-java', version: '3.0.4'
     implementation group: 'ai.picovoice', name: 'cheetah-java', version: '1.1.1'
+    implementation "com.clivern:wit-java:1.0.0"
 
     // Weather
     implementation group: 'com.maxmind.geoip2', name: 'geoip2', version: '4.1.0'
     implementation group: 'org.apache.httpcomponents.client5', name: 'httpclient5', version: '5.4.2'
+
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

@@ -14,6 +14,8 @@ import me.protonplus.lumin.Lumin;
 import me.protonplus.lumin.scenes.MainScene;
 import me.protonplus.lumin.scenes.ScalableTextBoxV2Scene;
 import me.protonplus.lumin.util.StageManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
@@ -27,7 +29,7 @@ import java.nio.file.StandardCopyOption;
 public class VoiceRecognition {
     private static final String PICO_API_TOKEN = System.getenv("PICO_API_TOKEN");
     private static final String keywordPath = "/me/protonplus/lumin/data/lumine_en_windows_v3_0_0.ppn";
-
+    protected static final Logger LOGGER = LogManager.getLogger(VoiceRecognition.class);
     public static Thread voiceThread;
 
     private static Cheetah cheetah;
@@ -42,7 +44,7 @@ public class VoiceRecognition {
         long totalBytesCaptured = 0;
         StringBuilder transcript = new StringBuilder();
         try {
-            System.out.println("Now listening...");
+            LOGGER.info("Now listening...");
             String readySoundEffect = "/me/protonplus/lumin/sounds/ready_sound_effect.mp3";
             Platform.runLater(() -> {
                 AudioClip media = new AudioClip(VoiceRecognition.class.getResource(readySoundEffect).toString());

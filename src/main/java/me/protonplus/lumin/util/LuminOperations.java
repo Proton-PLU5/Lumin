@@ -40,7 +40,6 @@ public class LuminOperations {
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> conversation(text));
 
         future.thenAccept((result) -> {
-            System.out.println(result);
             Platform.runLater(()->consumer.accept(result));
         });
     }
@@ -81,7 +80,6 @@ public class LuminOperations {
         reader.close();
 
         String jsonResponse = response.toString();
-        System.out.println(jsonResponse);
 
         // Parse the JSON string
         JsonParser parser = new JsonParser();

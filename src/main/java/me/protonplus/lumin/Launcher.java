@@ -5,6 +5,7 @@ import me.protonplus.lumin.util.voice.VoiceRecognition;
 public class Launcher {
 
     public static void main(String[] args) {
+
         Thread luminThread = new Thread(() -> {
             try {
                 Lumin.launchApplication();

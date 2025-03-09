@@ -17,10 +17,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import me.protonplus.lumin.events.Events;
-import me.protonplus.lumin.scenes.ScalableTextBoxV2Scene;
 import me.protonplus.lumin.util.LuminOperations;
 import me.protonplus.lumin.util.StageManager;
-import me.protonplus.lumin.util.WeatherAPI;
 import me.protonplus.lumin.util.WeatherAPI;
 
 import java.io.InputStream;
@@ -307,7 +305,6 @@ public class WeatherScene extends Scene {
         // Check if it's currently daytime
         boolean isDaytime = currentTime.isAfter(startTime) && currentTime.isBefore(endTime);
         weather = weather.toLowerCase();
-        System.out.println(weather);
 
         boolean dustWeatherCheck = weather.equalsIgnoreCase("sand") || weather.equalsIgnoreCase("ash") || weather.equalsIgnoreCase("dust");
         if (isDaytime) {
