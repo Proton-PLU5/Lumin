@@ -8,9 +8,17 @@ import ai.picovoice.porcupine.PorcupineException;
 import com.clivern.wit.exception.DataNotFound;
 import com.clivern.wit.exception.DataNotValid;
 import javafx.application.Platform;
+import javafx.scene.Group;
 import javafx.scene.media.AudioClip;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import me.protonplus.lumin.Lumin;
+import me.protonplus.lumin.scenes.AnimatedGestureScene;
+import me.protonplus.lumin.scenes.MainScene;
+import me.protonplus.lumin.scenes.ScalableTextBoxV2Scene;
+import me.protonplus.lumin.util.LuminOperations;
+import me.protonplus.lumin.util.StageManager;
 import me.protonplus.lumin.util.WitAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -116,12 +124,13 @@ public class VoiceRecognition {
                 micDataLine = (TargetDataLine) AudioSystem.getLine(dataLineInfo);
                 micDataLine.open(format);
             } catch (LineUnavailableException e) {
-                System.err.println("Failed to get a valid audio capture device.");
+                LOGGER.error("Failed to get a valid audio capture device.");
                 return;
             }
 
             // start audio capture
             micDataLine.start();
+
             // buffers for processing audio
             short[] porcupineBuffer = new short[porcupine.getFrameLength()];
             ByteBuffer porcupineCaptureBuffer = ByteBuffer.allocate(porcupine.getFrameLength() * 2);
@@ -145,15 +154,38 @@ public class VoiceRecognition {
                 // Process with Porcupine
                 int keywordIndex = porcupine.process(porcupineBuffer);
                 if (keywordIndex == 0) {
-                    Lumin.LOGGER.info("Wake word detected.");
+                    LOGGER.info("Wake word detected.");
                     try {
                         String output = startListener(micDataLine);
 
+                        // Get the intent behind the user's message.
                         Pair<WitAPI.INTENTS, String> pair = WitAPI.getIntent(output);
+
+                        // Process the intent
+                        if (pair.getKey().equals(WitAPI.INTENTS.GREETINGS)) {
+                            String response = LuminOperations.conversation(output);
+
+                            Platform.runLater(() -> {
+                                ScalableTextBoxV2Scene scalableTextBoxV2Scene = new ScalableTextBoxV2Scene(response, 5);
+                                Stage scalableTextBoxStage = new Stage();
+                                scalableTextBoxStage.setScene(scalableTextBoxV2Scene);
+                                ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(scalableTextBoxStage);
+                                scalableTextBoxStage.initOwner(StageManager.getStage("main").get());
+                                scalableTextBoxStage.show();
+
+                                Stage animatedGestureStage = new Stage();
+                                AnimatedGestureScene animatedGestureScene = new AnimatedGestureScene(new Group(), "/me/protonplus/lumin/images/animated/coffee-break.gif", 5);
+                                animatedGestureStage.setScene(animatedGestureScene);
+                                animatedGestureStage.setAlwaysOnTop(true);
+                                animatedGestureStage.initStyle(StageStyle.TRANSPARENT);
+                                animatedGestureStage.initOwner(StageManager.getStage("main").get());
+                                animatedGestureStage.show();
+                            });
+                        }
                     } catch (LineUnavailableException e) {
-                        Lumin.LOGGER.warn("Could not grab microphone.");
+                        LOGGER.error("Could not grab microphone.");
                     } catch (DataNotFound | DataNotValid e) {
-                        throw new RuntimeException(e);
+                        LOGGER.error("Could not process intent.");
                     }
                 }
             }
