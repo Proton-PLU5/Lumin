@@ -29,10 +29,11 @@ import java.nio.file.StandardCopyOption;
 public class VoiceRecognition {
     private static final String PICO_API_TOKEN = System.getenv("PICO_API_TOKEN");
     private static final String keywordPath = "/me/protonplus/lumin/data/lumine_en_windows_v3_0_0.ppn";
-    protected static final Logger LOGGER = LogManager.getLogger(VoiceRecognition.class);
     public static Thread voiceThread;
 
     private static Cheetah cheetah;
+
+    public static final Logger LOGGER = LogManager.getLogger(VoiceRecognition.class);
 
     public static void start() {
         Lumin.LOGGER.info("Starting voice recognition...");

@@ -45,6 +45,10 @@ extraJavaModuleInfo {
     }
     module('wit-java-1.0.0.jar', 'wit.java', '1.0.0') {
         exports("com.clivern.wit")
+        exports("com.clivern.wit.util")
+        exports("com.clivern.wit.api")
+        exports("com.clivern.wit.api.endpoint")
+        exports("com.clivern.wit.exception")
     }
     module("tinylog-1.3.2.jar", "tinylog", "1.3.2") {
         exports("org.tinylog")

@@ -16,6 +16,7 @@ open module me.protonplus.lumin {
     requires com.maxmind.geoip2;
     requires org.apache.httpcomponents.core5.httpcore5;
     requires org.apache.httpcomponents.client5.httpclient5;
+    requires wit.java;
 
     exports me.protonplus.lumin;
 }
