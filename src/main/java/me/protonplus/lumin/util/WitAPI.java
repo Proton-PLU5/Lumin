@@ -9,6 +9,7 @@ import com.clivern.wit.util.Config;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import javafx.util.Pair;
 import me.protonplus.lumin.util.voice.VoiceRecognition;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class WitAPI {
 
     public static enum INTENTS {
         GREETINGS,
+        EXPLAIN,
         WEATHER
     }
 
@@ -39,7 +41,7 @@ public class WitAPI {
         VoiceRecognition.LOGGER.info("Wit API Loaded!");
     }
 
-    public static void getIntent(String msg) throws DataNotFound, DataNotValid, IOException {
+    public static Pair<INTENTS, String> getIntent(String msg) throws DataNotFound, DataNotValid, IOException {
         Message message = new Message(MessageEndpoint.GET);
         message.setQ(msg);
 
@@ -56,20 +58,54 @@ public class WitAPI {
 
         String highestConfidenceIntent = null;
         double confidence = 0;
+        String additionalInfo = "";
 
+        // Determine which intent has the highest confidence.
         for (Iterator<String> it = entities.keySet().iterator(); it.hasNext(); ) {
             String key = it.next();
+            JsonObject innerObject = (JsonObject) ((JsonArray) entities.get(key)).get(0);
             if (highestConfidenceIntent == null) {
                 highestConfidenceIntent = key;
-                confidence = ((JsonObject) ((JsonArray) entities.get(key)).get(0)).get("confidence").getAsDouble();
-            } else if (((JsonObject) ((JsonArray) entities.get(key)).get(0)).get("confidence").getAsDouble() > confidence) {
-                confidence = ((JsonObject) ((JsonArray) entities.get(key)).get(0)).get("confidence").getAsDouble();
+                confidence = innerObject.get("confidence").getAsDouble();
+
+                // Preprocessing
+                // Extract information from intents that provide them
+                // ...
+                if (innerObject.has("value")) {
+                    additionalInfo = innerObject.get("value").getAsString();
+                }
+            } else if (innerObject.get("confidence").getAsDouble() > confidence) {
+                confidence = innerObject.get("confidence").getAsDouble();
                 highestConfidenceIntent = key;
+
+                // Preprocessing
+                // Extract information from intents that provide them
+                // ...
+                if (innerObject.has("value")) {
+                    additionalInfo = innerObject.get("value").getAsString();
+                }
             }
         }
 
-        System.out.println(highestConfidenceIntent);
-        return;
+
+        System.out.println(result);
+
+
+
+
+        return switch (highestConfidenceIntent) {
+            case "greetings" -> new Pair<>(INTENTS.GREETINGS, "");
+            case "explain" -> new Pair<>(INTENTS.EXPLAIN, additionalInfo);
+            case "get_weather" -> new Pair<>(INTENTS.WEATHER, additionalInfo);
+            default -> null;
+        };
+    }
+
+    public static void main(String[] args) throws DataNotFound, DataNotValid, IOException {
+        initializeWit();
+        Pair<INTENTS, String> pair = getIntent("Explain white holes.");
+        System.out.println(pair.getKey().name());
+        System.out.println(pair.getValue());
     }
 
 }

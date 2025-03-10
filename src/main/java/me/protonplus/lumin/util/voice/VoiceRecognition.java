@@ -5,15 +5,13 @@ import ai.picovoice.cheetah.CheetahException;
 import ai.picovoice.cheetah.CheetahTranscript;
 import ai.picovoice.porcupine.Porcupine;
 import ai.picovoice.porcupine.PorcupineException;
+import com.clivern.wit.exception.DataNotFound;
+import com.clivern.wit.exception.DataNotValid;
 import javafx.application.Platform;
 import javafx.scene.media.AudioClip;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.util.Pair;
 import me.protonplus.lumin.Lumin;
-import me.protonplus.lumin.scenes.MainScene;
-import me.protonplus.lumin.scenes.ScalableTextBoxV2Scene;
-import me.protonplus.lumin.util.StageManager;
+import me.protonplus.lumin.util.WitAPI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -151,24 +149,11 @@ public class VoiceRecognition {
                     try {
                         String output = startListener(micDataLine);
 
-                        Platform.runLater(() -> {
-                            Lumin.LOGGER.info("Processing Audio...");
-                            Stage scalableTextStage = new Stage();
-                            Stage mainStage = StageManager.getStage("main").get();
-                            ScalableTextBoxV2Scene scalableTextBoxScene = new ScalableTextBoxV2Scene(output, 15);
-                            scalableTextBoxScene.setFill(Color.TRANSPARENT);
-                            scalableTextStage.setAlwaysOnTop(true);
-                            scalableTextStage.initStyle(StageStyle.TRANSPARENT);
-                            scalableTextStage.initOwner(mainStage);
-                            scalableTextStage.setScene(scalableTextBoxScene);
-                            scalableTextStage.show();
-
-                            ((MainScene) mainStage.getScene()).addNewDialog(scalableTextStage);
-                        });
-
-                        // WitAPI.getIntent(output);
+                        Pair<WitAPI.INTENTS, String> pair = WitAPI.getIntent(output);
                     } catch (LineUnavailableException e) {
                         Lumin.LOGGER.warn("Could not grab microphone.");
+                    } catch (DataNotFound | DataNotValid e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
