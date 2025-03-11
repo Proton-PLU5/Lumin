@@ -64,10 +64,16 @@ public class StickyCardManager {
                     Stage stickyNoteStage = new Stage();
                     StickyCardScene scene = null;
 
+                    UUID uuid = UUID.fromString(file.getName().replace(".json", ""));
+
+                    if (StageManager.getStage(uuid.toString()).isPresent()) {
+                        StageManager.getStage(uuid.toString()).get().close();
+                    }
+
                     if (Objects.equals(imagePath, "null")) {
-                        scene = new StickyCardScene(new Group(), color, title, content, UUID.fromString(file.getName().replace(".json", "")));
+                        scene = new StickyCardScene(new Group(), color, title, content, uuid);
                     } else {
-                        scene = new StickyCardScene(new Group(), color, title, content, UUID.fromString(file.getName().replace(".json", "")), imagePath);
+                        scene = new StickyCardScene(new Group(), color, title, content, uuid, imagePath);
                     }
 
                     stickyNoteStage.setScene(scene);
@@ -78,6 +84,9 @@ public class StickyCardManager {
                     stickyNoteStage.setX(x);
                     stickyNoteStage.setY(y);
                     stickyNoteStage.setHeight(height);
+
+                    StageManager.setStage(uuid.toString(), stickyNoteStage);
+
                 } catch (IOException | JsonParseException ex) {
                     ex.printStackTrace();
                 }

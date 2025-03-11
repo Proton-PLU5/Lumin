@@ -72,7 +72,9 @@ public class SearchScene extends LuminScene {
         searchTextField.setPrefWidth(390);
         searchTextField.setBackground(Background.EMPTY);
         searchTextField.setFont(Font.font("Arial", FontWeight.NORMAL, 16));
+
         AnimationTimer timer = createTypeWriterAnimation(searchTextField);
+        timer.start();
         searchTextField.setOnKeyTyped(event -> {
             if (!defaultTextRemoved) {
                 defaultTextRemoved = true;
