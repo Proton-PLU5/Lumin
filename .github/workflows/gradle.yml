@@ -42,6 +42,13 @@ jobs:
       - name: Create runtime
         run: ./gradlew runtime
 
+      - name: Upload Runtime Image
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime
+          path: build/image/
+          if-no-files-found: error
+
       - name: Download Runtime Image
         uses: actions/download-artifact@v4
         with:
