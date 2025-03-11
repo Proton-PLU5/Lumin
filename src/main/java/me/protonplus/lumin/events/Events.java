@@ -1,58 +1,41 @@
 package me.protonplus.lumin.events;
 
+import javafx.application.Platform;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class Events {
-    public static List<Consumer<Integer>> pressListeners = new ArrayList<>();
+    public static final List<Consumer<Integer>> pressListeners = new ArrayList<>();
     public static List<Consumer<Integer>> mouseListeners = new ArrayList<>();
     public static List<Consumer<Integer>> mousePressedListerners = new ArrayList<>();
-    public static List<Consumer<Integer>> luminDraggedListeners = new ArrayList<>();
-    public static List<Consumer<Integer>> scalableTextBoxV2SceneCreatedListeners = new ArrayList<>();
+    public static final List<Consumer<Integer>> luminDraggedListeners = new ArrayList<>();
 
     public static void onLuminPressed() {
-        for (Consumer<Integer> func: pressListeners) {
-            try {
-                func.accept(0);
-            } catch (Exception ignored) {}
-            pressListeners.remove(func);
-        }
-    }
-
-    public static void onMouseMoved() {
-        for (Consumer<Integer> func: mouseListeners) {
-            try {
-                func.accept(0);
-            } catch (Exception ignored) {}
-            mouseListeners.remove(func);
-        }
-    }
-
-    public static void onMouseClicked() {
-        for (Consumer<Integer> func: mousePressedListerners) {
-            try {
-                func.accept(0);
-            } catch (Exception ignored) {}
-            mousePressedListerners.remove(func);
-        }
+        Platform.runLater(() -> {
+            synchronized (pressListeners) {
+                try {
+                    for (Consumer<Integer> func: pressListeners) {
+                        func.accept(0);
+                        pressListeners.remove(func);
+                    }
+                } catch (Exception ignored) {}
+            }
+        });
     }
 
     public static void onLuminDragged() {
-        for (Consumer<Integer> func: luminDraggedListeners) {
-            try {
-                func.accept(0);
-            } catch (Exception ignored) {}
-            luminDraggedListeners.remove(func);
-        }
+        Platform.runLater(() -> {
+            synchronized (luminDraggedListeners) {
+                try {
+                    for (Consumer<Integer> func: luminDraggedListeners) {
+                        func.accept(0);
+                        luminDraggedListeners.remove(func);
+                    }
+                } catch (Exception ignored) {}
+            }
+        });
     }
 
-    public static void onScalableTextBoxV2SceneCreated() {
-        for (Consumer<Integer> func: scalableTextBoxV2SceneCreatedListeners) {
-            try {
-                func.accept(0);
-            } catch (Exception ignored) {}
-            scalableTextBoxV2SceneCreatedListeners.remove(func);
-        }
-    }
 }

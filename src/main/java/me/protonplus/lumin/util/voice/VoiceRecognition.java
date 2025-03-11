@@ -13,6 +13,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import me.protonplus.lumin.Lumin;
 import me.protonplus.lumin.scenes.ButtonBoxScene;
+import me.protonplus.lumin.scenes.DialogScene;
 import me.protonplus.lumin.scenes.MainScene;
 import me.protonplus.lumin.scenes.WeatherScene;
 import me.protonplus.lumin.util.LuminOperations;
@@ -197,7 +198,17 @@ public class VoiceRecognition {
                             buttons.add("Open Chat");
                             List<Consumer> consumers = new ArrayList<>();
                             consumers.add((p) -> {
-
+                                Platform.runLater(() -> {
+                                    DialogScene dialogScene = new DialogScene(new Group());
+                                    dialogScene.previousMessages.add(output);
+                                    Platform.runLater(() -> {
+                                                dialogScene.createLabels(response);
+                                    });
+                                    Stage dialogStage = new Stage();
+                                    dialogStage.setScene(dialogScene);
+                                    dialogStage.initStyle(StageStyle.TRANSPARENT);
+                                    dialogStage.show();
+                                });
                             });
                             ButtonBoxScene.createExpirableButtonBox(response, 10, buttons, consumers);
                         }

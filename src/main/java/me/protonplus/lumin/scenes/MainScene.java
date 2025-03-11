@@ -14,7 +14,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import me.protonplus.lumin.Lumin;
+import me.protonplus.lumin.events.Events;
 import me.protonplus.lumin.util.LogoAnimationUtils;
 import me.protonplus.lumin.util.StageManager;
 
@@ -28,6 +31,7 @@ public class MainScene extends Scene {
     private boolean isDragging;
     private AudioClip media;
     private StackPane logoPane;
+    private Stage menuStage;
 
     private static List<Stage> dialogStages = new ArrayList<>();
     private static double totalDialogStagesHeight = 0;
@@ -40,6 +44,10 @@ public class MainScene extends Scene {
                 }
             }
         });
+    }
+
+    public static void toggleVisibility(boolean isLuminHidden) {
+
     }
 
     public void addNewDialog(Stage stage) {
@@ -88,6 +96,8 @@ public class MainScene extends Scene {
             }
         }
     }
+
+
 
     public MainScene(Group root) {
         super(root);
@@ -373,8 +383,10 @@ public class MainScene extends Scene {
         // Check if Lumin is within screen bounds.
         if (screenWidth-200 < startX+this.getWidth()) {
             targetX = startX - this.getWidth() - 10; // Move the stage to the left
+            createMenuStage(0);
         } else {
             targetX = startX + this.getWidth() + 10; // Move the stage to the right
+            createMenuStage(0);
         }
 
         DoubleProperty xProperty = new SimpleDoubleProperty(startX);
@@ -389,12 +401,14 @@ public class MainScene extends Scene {
             stage.setX(newValue.doubleValue());
             endX = newValue.doubleValue();
         });
+
+        Events.onLuminPressed();
     }
 
     private void handleMouseDrag(MouseEvent event) {
         targetX = event.getScreenX() - this.getWidth()/2;
         targetY = event.getScreenY() - this.getHeight()/2;
-
+        Events.onLuminDragged();
     }
 
     private void handleKeyPressed(KeyEvent event) {
@@ -402,5 +416,29 @@ public class MainScene extends Scene {
             Stage primaryStage = (Stage) ((Scene) event.getSource()).getWindow();
             primaryStage.close();
         }
+    }
+
+    private void createMenuStage(int offset) {
+        if (menuStage != null) {
+            menuStage.close();
+            menuStage = null;
+        }
+
+        Stage mainStage = StageManager.getStage("main").get();
+        menuStage = new Stage();
+        menuStage.initStyle(StageStyle.TRANSPARENT);
+        menuStage.setTitle("Lumin");
+        menuStage.setAlwaysOnTop(true);
+        menuStage.initOwner(mainStage);
+        menuStage.setScene(new MenuScene(new Group(), mainStage));
+        //menuStage.setHeight(250);
+        menuStage.setWidth(60);
+        Platform.runLater(() -> {
+            menuStage.setX(mainStage.getX()+offset);
+            menuStage.setY(mainStage.getY()- menuStage.getHeight()/2 +mainStage.getHeight()/2);
+        });
+        menuStage.show();
+        StageManager.setStage("menu", menuStage);
+        Lumin.LOGGER.info("Created menu stage.");
     }
 }

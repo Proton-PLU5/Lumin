@@ -6,10 +6,10 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import me.protonplus.lumin.scenes.ButtonBoxScene;
 import me.protonplus.lumin.scenes.MainScene;
+import me.protonplus.lumin.scenes.SettingsScene;
 import me.protonplus.lumin.util.StageManager;
-import me.protonplus.lumin.util.voice.VoiceRecognition;
+import me.protonplus.lumin.util.stickycards.StickyCardManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +19,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
 
 import static me.protonplus.lumin.scenes.AnimatedGestureScene.createExpirableAnimatedGesture;
 import static me.protonplus.lumin.scenes.ScalableTextBoxV2Scene.createExpirableTextBox;
@@ -27,8 +26,10 @@ import static me.protonplus.lumin.scenes.ScalableTextBoxV2Scene.createExpirableT
 public class Lumin extends Application {
 
     public static final Logger LOGGER = LogManager.getLogger(Lumin.class);
-    private MainScene scene;
-    private Group root;
+    public static Boolean notifyUnreadEmails = true;
+    public static Boolean autoHideLumin = false;
+    public static Boolean isLuminHidden = false;
+    public static Boolean autoOpenStickyCards = false;
 
     private double lerp(double start, double end, double t) {
         return start + t * (end - start);
@@ -37,6 +38,11 @@ public class Lumin extends Application {
     @Override
     public void start(Stage primaryStage) {
         Lumin.LOGGER.info("Starting Lumin!");
+
+        // Loading Settings
+        Lumin.LOGGER.info("Loading settings and generating necessary directories.");
+        SettingsScene.loadSettings();
+        StickyCardManager.createNessesaryDirectories();
 
         primaryStage.setTitle("Lumin");
         primaryStage.initStyle(StageStyle.UTILITY);

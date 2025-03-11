@@ -1,12 +1,9 @@
 package me.protonplus.lumin.scenes;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
-import javafx.animation.ParallelTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -25,7 +22,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
-public class ButtonBoxScene extends Scene {
+public class ButtonBoxScene extends LuminScene {
     private Timer timer;
     Group root;
 
@@ -108,34 +105,18 @@ public class ButtonBoxScene extends Scene {
     }
 
     public static void createExpirableButtonBox(String text, int expiry, ArrayList buttons, List<Consumer> consumers) {
-        ButtonBoxScene buttonBoxScene = new ButtonBoxScene(text, expiry, buttons, consumers);
-        Stage buttonBoxStage = new Stage();
-        buttonBoxStage.setScene(buttonBoxScene);
-        buttonBoxStage.initOwner(StageManager.getStage("main").get());
-        buttonBoxStage.initStyle(StageStyle.TRANSPARENT);
-        ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(buttonBoxStage);
-        buttonBoxStage.show();
-    }
-
-    public void close() {
-        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(0.5), this.getRoot());
-        fadeTransition.setFromValue(1);
-        fadeTransition.setInterpolator(Interpolator.EASE_BOTH);
-        fadeTransition.setToValue(0);
-
-        ParallelTransition parallelTransition = new ParallelTransition(fadeTransition);
-        parallelTransition.setOnFinished((e) -> {
-            Stage window = ((Stage)this.getWindow());
-            StageManager.removeStage(window);
-            try {
-                ((MainScene) StageManager.getStage("main").get().getScene()).removeDialog(window);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
-            window.close();
+        Platform.runLater(() -> {
+            ButtonBoxScene buttonBoxScene = new ButtonBoxScene(text, expiry, buttons, consumers);
+            Stage buttonBoxStage = new Stage();
+            buttonBoxStage.setScene(buttonBoxScene);
+            buttonBoxStage.initOwner(StageManager.getStage("main").get());
+            buttonBoxStage.initStyle(StageStyle.TRANSPARENT);
+            ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(buttonBoxStage);
+            buttonBoxStage.show();
         });
-        parallelTransition.play();
     }
+
+
 
     class ExpiryTask extends TimerTask {
         @Override
