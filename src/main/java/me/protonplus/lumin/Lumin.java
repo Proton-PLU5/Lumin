@@ -13,6 +13,7 @@ import me.protonplus.lumin.util.stickycards.StickyCardManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +27,6 @@ import static me.protonplus.lumin.scenes.ScalableTextBoxV2Scene.createExpirableT
 public class Lumin extends Application {
 
     public static final Logger LOGGER = LogManager.getLogger(Lumin.class);
-    public static Boolean notifyUnreadEmails = true;
     public static Boolean autoHideLumin = false;
     public static Boolean isLuminHidden = false;
     public static Boolean autoOpenStickyCards = false;
@@ -65,6 +65,8 @@ public class Lumin extends Application {
         mainStage.show();
 
         Platform.runLater(() -> showStartMessage(mainStage, 5));
+
+        createTray();
     }
 
     public static void launchApplication() {
@@ -93,5 +95,28 @@ public class Lumin extends Application {
         }
     }
 
+    // Create A system tray icon
+    // Add extra functionality in the future..
+    public static void createTray() {
+        if (SystemTray.isSupported()) {
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage(Lumin.class.getResource("/me/protonplus/lumin/images/lumin_tray.png"));
+            PopupMenu popup = new PopupMenu();
 
+            MenuItem exitItem = new MenuItem("Exit");
+            exitItem.addActionListener(e -> {
+                tray.remove(tray.getTrayIcons()[0]);
+                System.exit(0);
+            });
+
+            popup.add(exitItem);
+            TrayIcon trayIcon = new TrayIcon(image, "Lumin", popup);
+            trayIcon.setImageAutoSize(true);
+            try {
+                tray.add(trayIcon);
+            } catch (AWTException e) {
+                Lumin.LOGGER.error("Couldn't add tray icon.");
+            }
+        }
+    }
 }

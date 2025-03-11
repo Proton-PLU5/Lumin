@@ -48,14 +48,14 @@ public class StickyCardManager {
                     JsonObject jsonData = (JsonObject) JsonParser.parseReader(reader);
 
                     // Add data to the `jsonData` object
-                    String title = (String) jsonData.get("title").getAsString();
-                    String content = (String) jsonData.get("content").getAsString();
-                    Double x = (Double) jsonData.get("x").getAsDouble();
-                    Double y = (Double) jsonData.get("y").getAsDouble();
-                    Double height = (Double) jsonData.get("height").getAsDouble();
-                    String theme = (String) jsonData.get("theme").getAsString();
+                    String title = jsonData.get("title").getAsString();
+                    String content = jsonData.get("content").getAsString();
+                    double x = jsonData.get("x").getAsDouble();
+                    double y = jsonData.get("y").getAsDouble();
+                    double height = jsonData.get("height").getAsDouble();
+                    String theme = jsonData.get("theme").getAsString();
                     StickyCardColor color = StickyCardColor.YELLOW_THEME;
-                    String imagePath = (String) jsonData.get("imagePath").getAsString();
+                    String imagePath = jsonData.get("imagePath").getAsString();
 
                     if (Objects.equals(theme, "BLUE")) {
                         color = StickyCardColor.BLUE_THEME;
@@ -64,7 +64,7 @@ public class StickyCardManager {
                     }
 
                     Stage stickyNoteStage = new Stage();
-                    StickyCardScene scene = null;
+                    StickyCardScene scene;
 
                     UUID uuid = UUID.fromString(file.getName().replace(".json", ""));
 

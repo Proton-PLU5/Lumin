@@ -322,7 +322,6 @@ public class SettingsScene extends LuminScene {
 
             // Add data to the `jsonData` object
             jsonData.addProperty("autoHideLumin", autoHideLumin);
-            jsonData.addProperty("notifyUnreadEmails", notifyUnreadEmails);
             jsonData.addProperty("autoOpenStickyCards", autoOpenStickyCards);
 
             // Write the JSON data to the file
@@ -347,11 +346,9 @@ public class SettingsScene extends LuminScene {
 
                 // Add data to the `jsonData` object
                 Boolean _autoHideLumin = jsonData.get("autoHideLumin").getAsBoolean();
-                Boolean _notifyUnreadEmails = jsonData.get("notifyUnreadEmails").getAsBoolean();
                 Boolean _autoOpenStickyCards = jsonData.get("autoOpenStickyCards").getAsBoolean();
 
                 if (_autoHideLumin != null) {autoHideLumin=_autoHideLumin;}
-                if (_notifyUnreadEmails != null) {notifyUnreadEmails=_notifyUnreadEmails;}
                 if (_autoOpenStickyCards != null) {autoOpenStickyCards=_autoOpenStickyCards;}
 
             } catch (IOException ex) {
@@ -423,32 +420,6 @@ public class SettingsScene extends LuminScene {
         settingGrid.setTranslateY(29*2);
         settingGrid.setVgap(10);
         settingGrid.setHgap(10);
-
-        Rectangle notifyUnreadEmailsSettingRect = createLargeRectangle.get();
-        Label notifyUnreadEmailsSettingLabel = new Label("Notify Unread Messages");
-        notifyUnreadEmailsSettingLabel.setFont(Font.font("Inter", FontWeight.MEDIUM, 20));
-
-        Rectangle notifyUnreadEmailsSettingToggleRect = createSmallRectangle.get();
-        Label notifyUnreadEmailsSettingToggleLabel = new Label("Yes");
-        if (notifyUnreadEmails) {
-            notifyUnreadEmailsSettingToggleLabel.setText("Yes");
-        } else {
-            notifyUnreadEmailsSettingToggleLabel.setText("No");
-        }
-        notifyUnreadEmailsSettingToggleLabel.setFont(Font.font("Inter", FontWeight.MEDIUM, 20));
-        StackPane notifyUnreadEmailsSettingTogglePane = new StackPane(notifyUnreadEmailsSettingToggleRect, notifyUnreadEmailsSettingToggleLabel);
-
-        StackPane notifyUnreadEmailsPane = new StackPane(notifyUnreadEmailsSettingRect, notifyUnreadEmailsSettingLabel);
-        settingGrid.add(notifyUnreadEmailsPane, 0, 1);
-        settingGrid.add(notifyUnreadEmailsSettingTogglePane, 1, 1);
-        notifyUnreadEmailsSettingTogglePane.setOnMouseClicked(event -> {
-            notifyUnreadEmails = !notifyUnreadEmails;
-            if (notifyUnreadEmails) {
-                notifyUnreadEmailsSettingToggleLabel.setText("Yes");
-            } else {
-                notifyUnreadEmailsSettingToggleLabel.setText("No");
-            }
-        });
 
         this.settingsScreen.getChildren().add(settingGrid);
     }
