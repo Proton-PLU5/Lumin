@@ -23,7 +23,8 @@ public class WitAPI {
     public static enum INTENTS {
         GREETINGS,
         EXPLAIN,
-        WEATHER
+        WEATHER,
+        STICKYNOTE
     }
 
     public static void initializeWit() {
@@ -63,6 +64,20 @@ public class WitAPI {
             case "greeting" -> new Pair<>(INTENTS.GREETINGS, "");
             case "explain" -> new Pair<>(INTENTS.EXPLAIN, additionalInfo);
             case "get_weather" -> new Pair<>(INTENTS.WEATHER, additionalInfo);
+            case "stickynote" -> {
+                String stickyNoteTitle = "";
+                String stickyNoteContent = "";
+                if (entities.has("title")) {
+                    stickyNoteTitle = entities.get("title").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+                }
+                if (entities.has("content")) {
+                    stickyNoteContent = entities.get("content").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsString();
+                }
+                
+                additionalInfo = stickyNoteTitle + "|" + stickyNoteContent;
+                yield new Pair<>(INTENTS.STICKYNOTE, additionalInfo);
+            }
+
             default -> null;
         };
     }

@@ -13,7 +13,9 @@ import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import me.protonplus.lumin.Lumin;
 import me.protonplus.lumin.scenes.*;
+import me.protonplus.lumin.scenes.stickycards.StickyCardScene;
 import me.protonplus.lumin.util.*;
+import me.protonplus.lumin.util.stickycards.StickyCardColor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static me.protonplus.lumin.scenes.AnimatedGestureScene.createExpirableAnimatedGesture;
@@ -171,7 +174,8 @@ public class VoiceRecognition {
                                 createExpirableAnimatedGesture("/me/protonplus/lumin/images/animated/coffee-break.gif", 10);
                                 createExpirableTextBox(response, 10);
                             });
-                        } else if (pair.getKey().equals(WitAPI.INTENTS.WEATHER)) {
+                        }
+                        else if (pair.getKey().equals(WitAPI.INTENTS.WEATHER)) {
                             Platform.runLater(() -> {
                                 if (StageManager.getStage("weather").isPresent()) {
                                     ((MainScene) StageManager.getStage("main").get().getScene()).removeDialog(StageManager.getStage("weather").get());
@@ -189,7 +193,37 @@ public class VoiceRecognition {
 
                                 weatherStage.show();
                             });
-                        } else {
+                        }
+                        else if (pair.getKey().equals(WitAPI.INTENTS.STICKYNOTE)) {
+                            String additionalInfo = pair.getValue();
+                            String[] info = additionalInfo.split("\\|");
+                            System.out.printf("additionalInfo: %s\n", additionalInfo);
+                            Platform.runLater(() -> {
+                                String title;
+                                try {
+                                    title = info[0];
+                                } catch (IndexOutOfBoundsException e) {
+                                    title = "";
+
+                                }
+                                String content;
+                                try {
+                                    content = info[1];
+                                } catch (IndexOutOfBoundsException e) {
+                                    content = "";
+                                }
+                                StickyCardScene stickyCardScene = new StickyCardScene(new Group(), StickyCardColor.YELLOW_THEME, title, content, UUID.randomUUID());
+
+
+                                Stage stickyCardStage = new Stage();
+                                stickyCardStage.setScene(stickyCardScene);
+                                stickyCardStage.initStyle(StageStyle.TRANSPARENT);
+                                stickyCardStage.initOwner(StageManager.getStage("main").get());
+                                stickyCardStage.setAlwaysOnTop(true);
+                                stickyCardStage.show();
+                            });
+                        }
+                        else {
                             String response = LuminOperations.conversation(output);
                             ArrayList buttons = new ArrayList<String>();
                             buttons.add("Open Chat");
