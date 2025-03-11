@@ -37,7 +37,7 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew.bat build
+      run: ./gradlew build
 
     - name: Create runtime
       run: ./gradlew runtime
