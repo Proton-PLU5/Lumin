@@ -12,13 +12,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import me.protonplus.lumin.Lumin;
-import me.protonplus.lumin.scenes.ButtonBoxScene;
-import me.protonplus.lumin.scenes.DialogScene;
-import me.protonplus.lumin.scenes.MainScene;
-import me.protonplus.lumin.scenes.WeatherScene;
-import me.protonplus.lumin.util.LuminOperations;
-import me.protonplus.lumin.util.StageManager;
-import me.protonplus.lumin.util.WitAPI;
+import me.protonplus.lumin.scenes.*;
+import me.protonplus.lumin.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,7 +33,7 @@ import static me.protonplus.lumin.scenes.AnimatedGestureScene.createExpirableAni
 import static me.protonplus.lumin.scenes.ScalableTextBoxV2Scene.createExpirableTextBox;
 
 public class VoiceRecognition {
-    private static final String PICO_API_TOKEN = System.getenv("PICO_API_TOKEN");
+    private static final String PICO_API_TOKEN = LoadEnviromentalVariables.getVariable("PICO_API_TOKEN");
     private static final String keywordPath = "/me/protonplus/lumin/data/lumine_en_windows_v3_0_0.ppn";
     public static Thread voiceThread;
 
@@ -163,13 +158,15 @@ public class VoiceRecognition {
                     try {
                         String output = startListener(micDataLine);
 
+                        AnimatedGestureScene.createExpirableAnimatedGesture("/me/protonplus/lumin/images/animated/idea.gif", 5);
+
                         // Get the intent behind the user's message.
                         Pair<WitAPI.INTENTS, String> pair = WitAPI.getIntent(output);
 
                         // Process the intent
                         if (pair.getKey().equals(WitAPI.INTENTS.GREETINGS)) {
                             String response = LuminOperations.conversation(output);
-
+                            LogoAnimationUtils.setEyeEmotion(LogoAnimationUtils.Emotion.HAPPY);
                             Platform.runLater(() -> {
                                 createExpirableAnimatedGesture("/me/protonplus/lumin/images/animated/coffee-break.gif", 10);
                                 createExpirableTextBox(response, 10);
@@ -192,7 +189,7 @@ public class VoiceRecognition {
 
                                 weatherStage.show();
                             });
-                        } else if (pair.getKey().equals(WitAPI.INTENTS.EXPLAIN)) {
+                        } else {
                             String response = LuminOperations.conversation(output);
                             ArrayList buttons = new ArrayList<String>();
                             buttons.add("Open Chat");

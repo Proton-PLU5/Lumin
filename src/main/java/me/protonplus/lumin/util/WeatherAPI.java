@@ -23,9 +23,9 @@ import java.net.InetAddress;
 import java.net.URL;
 
 public class WeatherAPI {
-    protected static final String API_TOKEN = System.getenv("WEATHER_API_TOKEN");
-    protected static final String MAXMIND_LICENSE_KEY = System.getenv("MAXMIND_LICENSE_KEY");
-    protected static final int MAXMIND_ACCOUNT_ID = Integer.parseInt(System.getenv("MAXMIND_ACCOUNT_ID"));
+    protected static final String API_TOKEN = LoadEnviromentalVariables.getVariable("WEATHER_API_TOKEN");
+    protected static final String MAXMIND_LICENSE_KEY = LoadEnviromentalVariables.getVariable("MAXMIND_LICENSE_KEY");
+    protected static final int MAXMIND_ACCOUNT_ID = Integer.parseInt(LoadEnviromentalVariables.getVariable("MAXMIND_ACCOUNT_ID"));
     protected static final Logger LOGGER = LogManager.getLogger();
 
     public static class WeatherData {

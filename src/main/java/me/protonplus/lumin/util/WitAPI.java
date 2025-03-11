@@ -30,8 +30,8 @@ public class WitAPI {
         VoiceRecognition.LOGGER.info("Wit API Loading.");
 
         Config config = new Config();
-        config.set("wit_api_id", System.getenv("WIT_API_ID"));
-        config.set("wit_access_token", System.getenv("WIT_ACCESS_TOKEN"));
+        config.set("wit_api_id", LoadEnviromentalVariables.getVariable("WIT_API_ID"));
+        config.set("wit_access_token", LoadEnviromentalVariables.getVariable("WIT_ACCESS_TOKEN"));
         config.set("logging_level", "info");
 
         wit = new Wit(config);

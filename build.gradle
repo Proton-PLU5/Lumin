@@ -36,32 +36,6 @@ javafx {
     modules = ['javafx.controls', 'javafx.fxml', 'javafx.media']
 }
 
-/*
-extraJavaModuleInfo {
-    module('porcupine-java-3.0.4.jar', 'porcupine.java', '3.0.4') {
-        exports("ai.picovoice.porcupine")
-    }
-    module('cheetah-java-1.1.1.jar', 'cheetah.java', '1.1.1') {
-        exports("ai.picovoice.cheetah")
-    }
-    module('wit-java-1.0.0.jar', 'wit.java', '1.0.0') {
-        exports("com.clivern.wit")
-        exports("com.clivern.wit.util")
-        exports("com.clivern.wit.api")
-        exports("com.clivern.wit.api.endpoint")
-        exports("com.clivern.wit.exception")
-    }
-    module("tinylog-1.3.2.jar", "tinylog", "1.3.2") {
-        exports("org.tinylog")
-    }
-    module("okio-1.13.0.jar", "okio", "1.13.0") {
-        exports("okio")
-    }
-    module("okhttp-3.9.1.jar", "okhttp", "3.9.1") {
-        exports("okhttp")
-    }
-}*/
-
 dependencies {
     implementation('org.controlsfx:controlsfx:11.1.2')
     implementation('org.kordamp.ikonli:ikonli-javafx:12.3.1')
