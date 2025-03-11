@@ -18,6 +18,12 @@ public class StageManager {
         }
     }
 
+    public static boolean containsStage(String name) {
+        return stages.stream().anyMatch((stringStageEntry -> {
+            return Objects.equals(stringStageEntry.getKey(), name);
+        }));
+    }
+
     public static Optional<Stage> getStage(String name) {
         return stages.stream().filter((stringStageEntry) -> {
             return Objects.equals(stringStageEntry.getKey(), name);
@@ -34,5 +40,13 @@ public class StageManager {
                 return;
             }
         }
+    }
+
+    public static void closeStage(String weather) {
+        stages.stream().filter((stringStageEntry) ->
+                Objects.equals(stringStageEntry.getKey(), weather))
+                .findFirst().ifPresent((stringStageEntry) -> {
+            stringStageEntry.getValue().close();
+        });
     }
 }

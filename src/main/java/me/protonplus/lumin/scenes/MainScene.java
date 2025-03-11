@@ -6,7 +6,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -22,8 +21,6 @@ import me.protonplus.lumin.util.StageManager;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static me.protonplus.lumin.Lumin.showStartMessage;
 
 public class MainScene extends Scene {
     private double targetX, targetY;

@@ -6,11 +6,10 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import me.protonplus.lumin.events.Events;
-import me.protonplus.lumin.scenes.AnimatedGestureScene;
+import me.protonplus.lumin.scenes.ButtonBoxScene;
 import me.protonplus.lumin.scenes.MainScene;
-import me.protonplus.lumin.scenes.ScalableTextBoxV2Scene;
 import me.protonplus.lumin.util.StageManager;
+import me.protonplus.lumin.util.voice.VoiceRecognition;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +19,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
+
+import static me.protonplus.lumin.scenes.AnimatedGestureScene.createExpirableAnimatedGesture;
+import static me.protonplus.lumin.scenes.ScalableTextBoxV2Scene.createExpirableTextBox;
 
 public class Lumin extends Application {
 
@@ -54,6 +57,8 @@ public class Lumin extends Application {
         mainStage.setScene(scene);
         mainStage.setAlwaysOnTop(true);
         mainStage.show();
+
+        Platform.runLater(() -> showStartMessage(mainStage, 5));
     }
 
     public static void launchApplication() {
@@ -71,32 +76,16 @@ public class Lumin extends Application {
             }
             Random random = new Random();
             String startupText = lines.get(random.nextInt(lines.size()));
-            Stage animatedGestureStage = new Stage();
-            AnimatedGestureScene animatedGestureScene = new AnimatedGestureScene(new Group(), "/me/protonplus/lumin/images/animated/wave.gif", expire);
-            animatedGestureStage.setScene(animatedGestureScene);
-            animatedGestureStage.setAlwaysOnTop(true);
-            animatedGestureStage.initStyle(StageStyle.TRANSPARENT);
-            animatedGestureStage.initOwner(mainStage);
-            animatedGestureStage.show();
-            Events.luminDraggedListeners.add((t) -> animatedGestureScene.close());
-            Events.pressListeners.add((t) -> animatedGestureScene.close());
 
-            Stage scalableTextStage = new Stage();
-            ScalableTextBoxV2Scene scalableTextBoxScene = new ScalableTextBoxV2Scene(startupText, expire);
-            scalableTextBoxScene.setFill(Color.TRANSPARENT);
-            scalableTextStage.setAlwaysOnTop(true);
-            scalableTextStage.initStyle(StageStyle.TRANSPARENT);
-            scalableTextStage.initOwner(mainStage);
-            scalableTextStage.setScene(scalableTextBoxScene);
-            scalableTextStage.show();
+            createExpirableAnimatedGesture("/me/protonplus/lumin/images/animated/wave.gif", expire);
+            createExpirableTextBox(startupText, expire);
 
-            ((MainScene) mainStage.getScene()).addNewDialog(animatedGestureStage);
-            Platform.runLater(() -> {
-                ((MainScene) mainStage.getScene()).addNewDialog(scalableTextStage);
-            });
+
 
         } catch (IOException e) {
             Lumin.LOGGER.warn("Couldn't display start message.");
         }
     }
+
+
 }

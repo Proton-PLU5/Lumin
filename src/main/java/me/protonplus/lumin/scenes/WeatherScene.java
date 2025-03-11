@@ -14,12 +14,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import me.protonplus.lumin.events.Events;
 import me.protonplus.lumin.util.LuminOperations;
 import me.protonplus.lumin.util.StageManager;
 import me.protonplus.lumin.util.WeatherAPI;
+import me.protonplus.lumin.util.voice.VoiceRecognition;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -101,23 +100,8 @@ public class WeatherScene extends Scene {
         try {
             weatherData = WeatherAPI.getWeather();
         } catch (Exception e) {
-            e.printStackTrace();
-            Platform.runLater(() -> {
-                Stage scalableTextStage = new Stage();
-                Stage mainStage = StageManager.getStage("main").get();
-                ScalableTextBoxV2Scene scalableTextBoxScene = new ScalableTextBoxV2Scene(new Group(), "Something went wrong! Sorry!");
-                scalableTextStage.setScene(scalableTextBoxScene);
-                scalableTextStage.setAlwaysOnTop(true);
-                scalableTextStage.initStyle(StageStyle.TRANSPARENT);
-                scalableTextStage.initOwner(mainStage);
-                scalableTextStage.setScene(scalableTextBoxScene);
-                Events.luminDraggedListeners.add((t) -> scalableTextStage.close());
-                Events.scalableTextBoxV2SceneCreatedListeners.add((t) -> scalableTextStage.close());
-                scalableTextStage.show();
-
-                scalableTextStage.setX(mainStage.getX());
-                scalableTextStage.setY(mainStage.getY()-scalableTextBoxScene.getHeight()/2);
-            });
+            VoiceRecognition.LOGGER.error(e);
+            ScalableTextBoxV2Scene.createExpirableTextBox("Failed to get weather information, please try again later", 5);
             return;
         }
 

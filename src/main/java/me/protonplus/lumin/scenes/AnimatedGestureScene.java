@@ -3,6 +3,7 @@ package me.protonplus.lumin.scenes;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import me.protonplus.lumin.events.Events;
 import me.protonplus.lumin.util.StageManager;
@@ -46,6 +48,19 @@ public class AnimatedGestureScene extends Scene {
         timer.schedule(new ExpiryTask(), timeUntilExpiry * 1000L);
         Events.pressListeners.add((p) -> close());
         Events.luminDraggedListeners.add((p) -> close());
+    }
+
+    public static void createExpirableAnimatedGesture(String location, int expiry) {
+        Platform.runLater(() -> {
+            Stage animatedGestureStage = new Stage();
+            AnimatedGestureScene animatedGestureScene = new AnimatedGestureScene(new Group(), location, expiry);
+            animatedGestureStage.setScene(animatedGestureScene);
+            animatedGestureStage.setAlwaysOnTop(true);
+            animatedGestureStage.initStyle(StageStyle.TRANSPARENT);
+            animatedGestureStage.initOwner(StageManager.getStage("main").get());
+            animatedGestureStage.show();
+            ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(animatedGestureStage);
+        });
     }
 
     class ExpiryTask extends TimerTask {

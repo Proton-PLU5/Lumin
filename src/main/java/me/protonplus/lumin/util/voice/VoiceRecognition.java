@@ -5,8 +5,6 @@ import ai.picovoice.cheetah.CheetahException;
 import ai.picovoice.cheetah.CheetahTranscript;
 import ai.picovoice.porcupine.Porcupine;
 import ai.picovoice.porcupine.PorcupineException;
-import com.clivern.wit.exception.DataNotFound;
-import com.clivern.wit.exception.DataNotValid;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.media.AudioClip;
@@ -14,9 +12,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import me.protonplus.lumin.Lumin;
-import me.protonplus.lumin.scenes.AnimatedGestureScene;
+import me.protonplus.lumin.scenes.ButtonBoxScene;
 import me.protonplus.lumin.scenes.MainScene;
-import me.protonplus.lumin.scenes.ScalableTextBoxV2Scene;
+import me.protonplus.lumin.scenes.WeatherScene;
 import me.protonplus.lumin.util.LuminOperations;
 import me.protonplus.lumin.util.StageManager;
 import me.protonplus.lumin.util.WitAPI;
@@ -31,6 +29,12 @@ import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+import static me.protonplus.lumin.scenes.AnimatedGestureScene.createExpirableAnimatedGesture;
+import static me.protonplus.lumin.scenes.ScalableTextBoxV2Scene.createExpirableTextBox;
 
 public class VoiceRecognition {
     private static final String PICO_API_TOKEN = System.getenv("PICO_API_TOKEN");
@@ -166,26 +170,44 @@ public class VoiceRecognition {
                             String response = LuminOperations.conversation(output);
 
                             Platform.runLater(() -> {
-                                ScalableTextBoxV2Scene scalableTextBoxV2Scene = new ScalableTextBoxV2Scene(response, 5);
-                                Stage scalableTextBoxStage = new Stage();
-                                scalableTextBoxStage.setScene(scalableTextBoxV2Scene);
-                                ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(scalableTextBoxStage);
-                                scalableTextBoxStage.initOwner(StageManager.getStage("main").get());
-                                scalableTextBoxStage.show();
-
-                                Stage animatedGestureStage = new Stage();
-                                AnimatedGestureScene animatedGestureScene = new AnimatedGestureScene(new Group(), "/me/protonplus/lumin/images/animated/coffee-break.gif", 5);
-                                animatedGestureStage.setScene(animatedGestureScene);
-                                animatedGestureStage.setAlwaysOnTop(true);
-                                animatedGestureStage.initStyle(StageStyle.TRANSPARENT);
-                                animatedGestureStage.initOwner(StageManager.getStage("main").get());
-                                animatedGestureStage.show();
+                                createExpirableAnimatedGesture("/me/protonplus/lumin/images/animated/coffee-break.gif", 10);
+                                createExpirableTextBox(response, 10);
                             });
+                        } else if (pair.getKey().equals(WitAPI.INTENTS.WEATHER)) {
+                            Platform.runLater(() -> {
+                                if (StageManager.getStage("weather").isPresent()) {
+                                    ((MainScene) StageManager.getStage("main").get().getScene()).removeDialog(StageManager.getStage("weather").get());
+                                    StageManager.getStage("weather").get().close();
+                                }
+
+                                WeatherScene weatherScene = new WeatherScene(new Group());
+                                Stage weatherStage = new Stage();
+                                weatherStage.setScene(weatherScene);
+                                weatherStage.initOwner(StageManager.getStage("main").get());
+                                weatherStage.initStyle(StageStyle.TRANSPARENT);
+                                weatherStage.setAlwaysOnTop(true);
+                                ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(weatherStage);
+                                StageManager.setStage("weather", weatherStage);
+
+                                weatherStage.show();
+                            });
+                        } else if (pair.getKey().equals(WitAPI.INTENTS.EXPLAIN)) {
+                            String response = LuminOperations.conversation(output);
+                            ArrayList buttons = new ArrayList<String>();
+                            buttons.add("Open Chat");
+                            List<Consumer> consumers = new ArrayList<>();
+                            consumers.add((p) -> {
+
+                            });
+                            ButtonBoxScene.createExpirableButtonBox(response, 10, buttons, consumers);
                         }
                     } catch (LineUnavailableException e) {
                         LOGGER.error("Could not grab microphone.");
-                    } catch (DataNotFound | DataNotValid e) {
+                        createExpirableTextBox("I'm sorry, I couldn't listen to your microphone.", 10);
+                    } catch (Exception e) {
                         LOGGER.error("Could not process intent.");
+                        createExpirableTextBox("I'm sorry, I didn't understand that.", 10);
+                        e.printStackTrace();
                     }
                 }
             }
@@ -195,4 +217,8 @@ public class VoiceRecognition {
             throw new RuntimeException(e);
         }
     }
+
+
+
+
 }

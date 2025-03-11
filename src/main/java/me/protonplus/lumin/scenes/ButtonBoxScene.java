@@ -17,19 +17,20 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import me.protonplus.lumin.events.Events;
 import me.protonplus.lumin.util.StageManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
-public class ScalableTextBoxV2Scene extends Scene {
+public class ButtonBoxScene extends Scene {
     private Timer timer;
     Group root;
+
     // Primary Constructor
-    public ScalableTextBoxV2Scene(Group root, String text) {
+    public ButtonBoxScene(Group root, String text, List<String> buttonNames, List<Consumer> buttonActions) {
         super(root);
         this.root = root;
         this.setFill(Color.TRANSPARENT);
@@ -49,57 +50,13 @@ public class ScalableTextBoxV2Scene extends Scene {
         label.setTranslateY(5);
         label.setTranslateX(5);
 
+        double labelHeight = (label.getHeight()+10);
+
         anchorPane.getChildren().add(label);
         anchorPane.setPrefWidth(label.getWidth()+5);
-        anchorPane.setPrefHeight(label.getHeight()+10);
+        anchorPane.setPrefHeight(labelHeight);
 
-        // Fade in animation
-        FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), root);
-        fadeIn.setFromValue(0);
-        fadeIn.setToValue(1);
-        fadeIn.play();
-
-        root.getChildren().add(anchorPane);
-        // Events.onScalableTextBoxV2SceneCreated();
-    }
-
-    public ScalableTextBoxV2Scene(String text, boolean listenToMouseMove, boolean listenToMousePress) {
-        this(new Group(), text);
-        if (listenToMouseMove) {
-            Events.mouseListeners.add((t) -> close());
-        } else if (listenToMousePress) {Events.mousePressedListerners.add((t)-> close());}
-    }
-
-    public ScalableTextBoxV2Scene(String text, Integer timeUntilExpiry) {
-        this(new Group(), text);
-        timer = new Timer();
-        timer.schedule(new ExpiryTask(), timeUntilExpiry * 1000);
-    }
-
-    public ScalableTextBoxV2Scene(String text, boolean listenToMouseMove, boolean listenToMousePress, Integer timeUntilExpiry) {
-        this(text, listenToMouseMove, listenToMousePress);
-        timer = new Timer();
-        timer.schedule(new ExpiryTask(), timeUntilExpiry * 1000);
-    }
-
-    // Quick access method
-    public static void createExpirableTextBox(String response, int expiry) {
-        Platform.runLater(() -> {
-            ScalableTextBoxV2Scene scalableTextBoxV2Scene = new ScalableTextBoxV2Scene(response, expiry);
-            Stage scalableTextBoxStage = new Stage();
-            scalableTextBoxStage.setScene(scalableTextBoxV2Scene);
-            scalableTextBoxStage.initOwner(StageManager.getStage("main").get());
-            scalableTextBoxStage.initStyle(StageStyle.TRANSPARENT);
-
-            scalableTextBoxStage.show();
-            ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(scalableTextBoxStage);
-
-
-        });
-    }
-
-    // Function to add interactivity to the scene
-    public static AnchorPane createInteractibleButtons(List<String> buttonNames, List<Consumer> buttonActions) {
+        // Create buttons
         AnchorPane buttons = new AnchorPane();
 
         for (int i = 0; i < buttonNames.size(); i++) {
@@ -127,7 +84,37 @@ public class ScalableTextBoxV2Scene extends Scene {
             buttons.getChildren().add(button);
         }
 
-        return buttons;
+        Platform.runLater(() -> {
+            buttons.setTranslateY(anchorPane.getBoundsInLocal().getHeight() + 5);
+            this.getWindow().setHeight(this.getWindow().getHeight()+buttons.getBoundsInLocal().getHeight()+5);
+        });
+
+        anchorPane.getChildren().add(buttons);
+
+        // Fade in animation
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), root);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);
+        fadeIn.play();
+
+        root.getChildren().add(anchorPane);
+    }
+
+
+    public ButtonBoxScene(String text, Integer timeUntilExpiry, List<String> buttonNames, List<Consumer> buttonActions) {
+        this(new Group(), text, buttonNames, buttonActions);
+        timer = new Timer();
+        timer.schedule(new ExpiryTask(), timeUntilExpiry * 1000);
+    }
+
+    public static void createExpirableButtonBox(String text, int expiry, ArrayList buttons, List<Consumer> consumers) {
+        ButtonBoxScene buttonBoxScene = new ButtonBoxScene(text, expiry, buttons, consumers);
+        Stage buttonBoxStage = new Stage();
+        buttonBoxStage.setScene(buttonBoxScene);
+        buttonBoxStage.initOwner(StageManager.getStage("main").get());
+        buttonBoxStage.initStyle(StageStyle.TRANSPARENT);
+        ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(buttonBoxStage);
+        buttonBoxStage.show();
     }
 
     public void close() {
@@ -158,5 +145,4 @@ public class ScalableTextBoxV2Scene extends Scene {
             timer.cancel(); // Cancel the timer
         }
     }
-
 }
