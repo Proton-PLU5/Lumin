@@ -4,7 +4,6 @@ javafx-sdk-20.0.1/
 **/build/
 build/
 !src/**/build/
-gradle
 
 gradlew
 gradlew.bat
