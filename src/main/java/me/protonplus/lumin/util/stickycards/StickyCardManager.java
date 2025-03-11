@@ -34,7 +34,7 @@ public class StickyCardManager {
 
         // Check if the directory exists
         if (!directory.exists() || !directory.isDirectory()) {
-            Lumin.LOGGER.warn("Couldn't locate the stickynotes directory. Is this the first launch?");
+            Lumin.LOGGER.warn("Couldn't locate the sticky notes directory. Is this the first launch?");
             return;
         }
 
@@ -57,10 +57,12 @@ public class StickyCardManager {
                     StickyCardColor color = StickyCardColor.YELLOW_THEME;
                     String imagePath = (String) jsonData.get("imagePath").getAsString();
 
-
-                    if (theme == "YELLOW") {
-                        color = StickyCardColor.YELLOW_THEME;
+                    if (Objects.equals(theme, "BLUE")) {
+                        color = StickyCardColor.BLUE_THEME;
+                    } else if (Objects.equals(theme, "PINK")) {
+                        color = StickyCardColor.PINK_THEME;
                     }
+
                     Stage stickyNoteStage = new Stage();
                     StickyCardScene scene = null;
 

@@ -42,6 +42,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+import static me.protonplus.lumin.util.stickycards.StickyCardColor.*;
+
 
 public class StickyCardScene extends Scene {
     private double initialY;
@@ -50,7 +52,7 @@ public class StickyCardScene extends Scene {
     double xOffset = 0;
     double yOffset = 0;
 
-    public StickyCardColor theme = StickyCardColor.YELLOW_THEME;
+    public StickyCardColor theme = YELLOW_THEME;
     
     public TextArea titleArea;
     public TextArea contentArea;
@@ -166,7 +168,9 @@ public class StickyCardScene extends Scene {
         jsonData.addProperty("title", titleArea.getText());
         jsonData.addProperty("content", contentArea.getText());
         String strTheme = "YELLOW";
-        if (this.theme == StickyCardColor.YELLOW_THEME) {jsonData.addProperty("theme", strTheme);}
+        if (this.theme == YELLOW_THEME) {jsonData.addProperty("theme", strTheme);}
+        else if (this.theme == BLUE_THEME) {jsonData.addProperty("theme", "BLUE");}
+        else if (this.theme == PINK_THEME) {jsonData.addProperty("theme", "PINK");}
         jsonData.addProperty("x", this.getWindow().getX());
         jsonData.addProperty("y", this.getWindow().getY());
         jsonData.addProperty("height", this.getWindow().getHeight());
@@ -411,15 +415,14 @@ class StickyCardSettingsScene extends Scene {
         Rectangle paletteRect = new Rectangle(25, 25);
         paletteRect.setFill(Color.TRANSPARENT);
         paletteRect.setOnMousePressed((e) -> {
-            if (owner.theme.equals(StickyCardColor.YELLOW_THEME)) {
-                owner.theme = StickyCardColor.BLUE_THEME;
-            } else if (owner.theme.equals(StickyCardColor.BLUE_THEME)) {
-                owner.theme = StickyCardColor.PINK_THEME;
-            } else if (owner.theme.equals(StickyCardColor.PINK_THEME)) {
-                owner.theme = StickyCardColor.YELLOW_THEME;
+            if (owner.theme.equals(YELLOW_THEME)) {
+                owner.theme = BLUE_THEME;
+            } else if (owner.theme.equals(BLUE_THEME)) {
+                owner.theme = PINK_THEME;
+            } else if (owner.theme.equals(PINK_THEME)) {
+                owner.theme = YELLOW_THEME;
             }
             owner.updateTheme();
-            removeImage(owner);
         });
 
         StackPane palettePane = new StackPane(paletteView, paletteRect);
@@ -462,15 +465,14 @@ class StickyCardSettingsScene extends Scene {
         Rectangle paletteRect = new Rectangle(25, 25);
         paletteRect.setFill(Color.TRANSPARENT);
         paletteRect.setOnMousePressed((e) -> {
-            if (owner.theme.equals(StickyCardColor.YELLOW_THEME)) {
-                owner.theme = StickyCardColor.BLUE_THEME;
-            } else if (owner.theme.equals(StickyCardColor.BLUE_THEME)) {
-                owner.theme = StickyCardColor.PINK_THEME;
-            } else if (owner.theme.equals(StickyCardColor.PINK_THEME)) {
-                owner.theme = StickyCardColor.YELLOW_THEME;
+            if (owner.theme.equals(YELLOW_THEME)) {
+                owner.theme = BLUE_THEME;
+            } else if (owner.theme.equals(BLUE_THEME)) {
+                owner.theme = PINK_THEME;
+            } else if (owner.theme.equals(PINK_THEME)) {
+                owner.theme = YELLOW_THEME;
             }
             owner.updateTheme();
-            removeImage(owner);
         });
 
         StackPane palettePane = new StackPane(paletteView, paletteRect);
