@@ -10,6 +10,7 @@ import me.protonplus.lumin.scenes.MainScene;
 import me.protonplus.lumin.scenes.SettingsScene;
 import me.protonplus.lumin.util.StageManager;
 import me.protonplus.lumin.util.google.GoogleCalenderAPI;
+import me.protonplus.lumin.util.google.GoogleGmailAPI;
 import me.protonplus.lumin.util.stickycards.StickyCardManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,6 +35,9 @@ public class Lumin extends Application {
     public static Boolean autoOpenStickyCards = false;
 
     public static GoogleCalenderAPI CALENDAR_API;
+    public static GoogleGmailAPI GMAIL_API;
+
+    public static final String APPLICATION_NAME = "Lumin";
 
     @Override
     public void start(Stage primaryStage) throws GeneralSecurityException, IOException {
@@ -45,6 +49,8 @@ public class Lumin extends Application {
         StickyCardManager.createNessesaryDirectories();
         CALENDAR_API = new GoogleCalenderAPI();
         CALENDAR_API.getNextCalenderEvent(5);
+        GMAIL_API = new GoogleGmailAPI();
+        GMAIL_API.getLatestEmail();
 
         primaryStage.setTitle("Lumin");
         primaryStage.initStyle(StageStyle.UTILITY);
