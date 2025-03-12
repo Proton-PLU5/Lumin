@@ -9,6 +9,7 @@ import javafx.stage.StageStyle;
 import me.protonplus.lumin.scenes.MainScene;
 import me.protonplus.lumin.scenes.SettingsScene;
 import me.protonplus.lumin.util.StageManager;
+import me.protonplus.lumin.util.google.GoogleCalenderAPI;
 import me.protonplus.lumin.util.stickycards.StickyCardManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +18,7 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -31,18 +33,18 @@ public class Lumin extends Application {
     public static Boolean isLuminHidden = false;
     public static Boolean autoOpenStickyCards = false;
 
-    private double lerp(double start, double end, double t) {
-        return start + t * (end - start);
-    }
+    public static GoogleCalenderAPI CALENDAR_API;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws GeneralSecurityException, IOException {
         Lumin.LOGGER.info("Starting Lumin!");
 
         // Loading Settings
         Lumin.LOGGER.info("Loading settings and generating necessary directories.");
         SettingsScene.loadSettings();
         StickyCardManager.createNessesaryDirectories();
+        CALENDAR_API = new GoogleCalenderAPI();
+        CALENDAR_API.getNextCalenderEvent(5);
 
         primaryStage.setTitle("Lumin");
         primaryStage.initStyle(StageStyle.UTILITY);
