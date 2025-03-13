@@ -1,6 +1,8 @@
 # Lumin
 
-![](https://github.com/Proton-PLU5/Lumin/blob/main/src/main/resources/me/protonplus/lumin/images/lumin.png?raw=true)
+<p align="center">
+    <img src=https://github.com/Proton-PLU5/Lumin/blob/main/src/main/resources/me/protonplus/lumin/images/lumin.png?raw=true>
+</p>
 
 A Personalized Desktop Assistant developed to help users use their desktops more efficently.
 
