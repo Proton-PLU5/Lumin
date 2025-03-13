@@ -11,6 +11,7 @@
 > [!IMPORTANT]
 > Lumin is very much still in beta, many features are still being tested and worked on.
 > If any bugs have been discovered please create an issue regarding the specific issue.
+> 
 > Keep track of this repository for future updates and plans!
 
 ## Overview
