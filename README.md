@@ -2,6 +2,8 @@
 
 <div align="center">
     <img src=https://github.com/Proton-PLU5/Lumin/blob/main/src/main/resources/me/protonplus/lumin/images/lumin.png?raw=true>
+</div>
+<div>
     <em>A Personalized Desktop Assistant developed to help users use their desktops more efficently.</em>
 </div>
 
