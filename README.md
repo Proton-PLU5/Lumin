@@ -67,3 +67,6 @@ Lumin is a personalized desktop assistant designed to help you with various task
 - Implement reminder capabilities with access to Calander to allow users to plan and create events.
 - Autocomplete feature in Documents to help users create and write documents
 - Screen image recognition to provide enhanced assistance capabilities.
+
+### 📝 License
+Copyright (c) 2025-Present, Mathew Cibi
