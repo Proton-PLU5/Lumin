@@ -8,6 +8,11 @@
     <em>A Personalized Desktop Assistant developed to help users use their desktops more efficently.</em>
 </div>
 
+> [!IMPORTANT]
+> Lumin is very much still in beta, many features are still being tested and worked on.
+> If any bugs have been discovered please create an issue regarding the specific issue.
+> Keep track of this repository for future updates and plans!
+
 ## Overview
 
 Lumin is a personalized desktop assistant designed to help you with various tasks such as getting weather updates, creating sticky notes and answering questions. It leverages voice recognition technologies and integrates with various APIs to provide a seamless user experience.
