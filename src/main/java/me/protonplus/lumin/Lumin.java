@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import me.protonplus.lumin.scenes.MainScene;
 import me.protonplus.lumin.scenes.SettingsScene;
+import me.protonplus.lumin.scenes.WeatherScene;
 import me.protonplus.lumin.util.StageManager;
 import me.protonplus.lumin.util.google.GoogleCalenderAPI;
 import me.protonplus.lumin.util.google.GoogleGmailAPI;
@@ -47,10 +48,25 @@ public class Lumin extends Application {
         Lumin.LOGGER.info("Loading settings and generating necessary directories.");
         SettingsScene.loadSettings();
         StickyCardManager.createNessesaryDirectories();
+
+        // Setting up the Calendar and Gmail APIs.
         CALENDAR_API = new GoogleCalenderAPI();
         CALENDAR_API.getNextCalenderEvent(5);
+
         GMAIL_API = new GoogleGmailAPI();
-        GMAIL_API.getLatestEmail();
+        int newEmails = GMAIL_API.checkForNewEmails();
+        Lumin.LOGGER.info("Number of new emails: {}", newEmails);
+
+        Platform.runLater(() -> {
+            WeatherScene weatherScene = new WeatherScene(new Group());
+            Stage weatherStage = new Stage();
+            weatherStage.setScene(weatherScene);
+            weatherStage.initOwner(StageManager.getStage("main").get());
+            weatherStage.initStyle(StageStyle.TRANSPARENT);
+            weatherStage.setAlwaysOnTop(true);
+            ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(weatherStage);
+            StageManager.setStage("weather", weatherStage);
+        });
 
         primaryStage.setTitle("Lumin");
         primaryStage.initStyle(StageStyle.UTILITY);
