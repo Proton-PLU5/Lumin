@@ -51,22 +51,8 @@ public class Lumin extends Application {
 
         // Setting up the Calendar and Gmail APIs.
         CALENDAR_API = new GoogleCalenderAPI();
-        CALENDAR_API.getNextCalenderEvent(5);
-
         GMAIL_API = new GoogleGmailAPI();
-        int newEmails = GMAIL_API.checkForNewEmails();
-        Lumin.LOGGER.info("Number of new emails: {}", newEmails);
-
-        Platform.runLater(() -> {
-            WeatherScene weatherScene = new WeatherScene(new Group());
-            Stage weatherStage = new Stage();
-            weatherStage.setScene(weatherScene);
-            weatherStage.initOwner(StageManager.getStage("main").get());
-            weatherStage.initStyle(StageStyle.TRANSPARENT);
-            weatherStage.setAlwaysOnTop(true);
-            ((MainScene) StageManager.getStage("main").get().getScene()).addNewDialog(weatherStage);
-            StageManager.setStage("weather", weatherStage);
-        });
+        GMAIL_API.getNewEmailCountSinceLastCheck();
 
         primaryStage.setTitle("Lumin");
         primaryStage.initStyle(StageStyle.UTILITY);
